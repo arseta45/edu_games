@@ -1,0 +1,843 @@
+/* =========================================================
+   EDU GAME - BALAP KARUNG
+   RACE TRACK
+========================================================= */
+
+:root {
+    --red: #ef4444;
+    --red-dark: #dc2626;
+    --red-light: #fee2e2;
+
+    --blue: #3b82f6;
+    --blue-dark: #2563eb;
+    --blue-light: #dbeafe;
+
+    --yellow: #facc15;
+    --green: #22c55e;
+
+    --purple: #7c3aed;
+
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #64748b;
+    --border: #e2e8f0;
+
+    --shadow-sm:
+        0 2px 8px rgba(15, 23, 42, 0.06);
+
+    --shadow:
+        0 10px 30px rgba(15, 23, 42, 0.10);
+
+    --shadow-lg:
+        0 20px 50px rgba(15, 23, 42, 0.14);
+
+    --radius: 16px;
+}
+
+
+/* =========================================================
+   RACE TRACK AREA
+========================================================= */
+
+.race-track-area {
+    position: relative;
+
+    width: 100%;
+
+    margin: 25px 0 35px;
+
+    padding: 20px 0 30px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f8fafc,
+            #eef2f7
+        );
+
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   START LINE
+========================================================= */
+
+.race-start-line {
+    position: absolute;
+
+    /* Sedikit di depan karakter */
+    left: 22px;
+
+    top: 0;
+    bottom: 0;
+
+    width: 4px;
+
+    z-index: 8;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            #111827 0,
+            #111827 12px,
+            #ffffff 12px,
+            #ffffff 24px
+        );
+
+    box-shadow:
+        0 0 0 1px rgba(15, 23, 42, 0.15);
+}
+
+.race-start-line span {
+    position: absolute;
+
+    top: -24px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    padding: 5px 9px;
+
+    border-radius: 7px;
+
+    background: #111827;
+    color: #fff;
+
+    font-size: 0.65rem;
+    font-weight: 900;
+
+    white-space: nowrap;
+}
+
+
+
+
+
+/* =========================================================
+   FINISH LINE
+========================================================= */
+
+.race-finish-line {
+    position: absolute;
+
+    right: 85px;
+    top: 20px;
+    bottom: 30px;
+
+    width: 8px;
+
+    /* Di belakang karakter */
+    z-index: 2;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            #111827 0,
+            #111827 12px,
+            #ffffff 12px,
+            #ffffff 24px
+        );
+
+    box-shadow:
+        0 0 0 1px rgba(15, 23, 42, 0.15);
+}
+
+.race-finish-line span {
+    position: absolute;
+
+    top: -24px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    padding: 5px 9px;
+
+    border-radius: 7px;
+
+    background: #16a34a;
+    color: #ffffff;
+
+    font-size: 0.65rem;
+    font-weight: 900;
+
+    letter-spacing: 0.08em;
+
+    white-space: nowrap;
+
+    z-index: 2;
+}
+
+.finish-flag {
+    position: absolute;
+
+    top: -45px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    font-size: 2rem;
+
+    filter:
+        drop-shadow(
+            0 3px 4px rgba(0, 0, 0, 0.2)
+        );
+
+    z-index: 2;
+}
+
+
+
+/* =========================================================
+   RACE LANE
+========================================================= */
+
+.race-lane {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns: 150px minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 15px;
+
+    min-height: 145px;
+
+    padding: 20px 35px 20px 20px;
+}
+
+
+/* =========================================================
+   TEAM HEADER
+========================================================= */
+
+.race-lane-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    min-width: 0;
+
+    font-size: 0.95rem;
+    font-weight: 900;
+}
+
+.race-lane-header strong {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.race-team-badge {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    width: 36px;
+    height: 36px;
+
+    border-radius: 50%;
+
+    font-size: 1.1rem;
+}
+
+.race-team-badge.red {
+    background: var(--red-light);
+
+    border: 2px solid #fecaca;
+}
+
+.race-team-badge.blue {
+    background: var(--blue-light);
+
+    border: 2px solid #bfdbfe;
+}
+
+
+/* =========================================================
+   TRACK
+========================================================= */
+
+.race-track {
+    position: relative;
+
+    height: 105px;
+
+    border-radius: 18px;
+
+    overflow: visible;
+
+    /*
+     * Lintasan seperti arena lomba.
+     */
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #f8fafc
+        );
+
+    border: 2px solid #e2e8f0;
+
+    box-shadow:
+        inset 0 2px 5px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   TRACK GARIS
+========================================================= */
+
+.race-track-line {
+    position: absolute;
+
+    left: 15px;
+    right: 15px;
+
+    top: 50%;
+
+    height: 6px;
+
+    transform: translateY(-50%);
+
+    border-radius: 999px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #d6a15d 0,
+            #d6a15d 18px,
+            #c58b45 18px,
+            #c58b45 36px
+        );
+
+    box-shadow:
+        inset 0 2px 2px rgba(0, 0, 0, 0.15),
+        0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   TRACK DASHES
+========================================================= */
+
+.race-track::before {
+    content: "";
+
+    position: absolute;
+
+    left: 15px;
+    right: 15px;
+
+    top: 18px;
+
+    height: 2px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #cbd5e1 0,
+            #cbd5e1 12px,
+            transparent 12px,
+            transparent 24px
+        );
+
+    opacity: 0.6;
+}
+
+.race-track::after {
+    content: "";
+
+    position: absolute;
+
+    left: 15px;
+    right: 15px;
+
+    bottom: 18px;
+
+    height: 2px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #cbd5e1 0,
+            #cbd5e1 12px,
+            transparent 12px,
+            transparent 24px
+        );
+
+    opacity: 0.6;
+}
+
+
+/* =========================================================
+   KARAKTER
+========================================================= */
+
+.race-character {
+    position: absolute;
+
+    top: 50%;
+    left: 0;
+
+    width: 105px;
+    height: 105px;
+
+    transform: translate(-20%, calc(-50% - 15px));
+
+    z-index: 6;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    pointer-events: none;
+
+    will-change: left, transform;
+
+    transition:
+        left 0.55s cubic-bezier(
+            .22,
+            1,
+            .36,
+            1
+        );
+}
+
+/* =========================================================
+   OPENING ANIMATION
+========================================================= */
+.race-character.race-ready {
+    animation:
+        raceReadyJump 0.55s
+        cubic-bezier(.22, 1, .36, 1);
+}
+
+@keyframes raceReadyJump {
+    0% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(0)
+            rotate(0deg);
+    }
+
+    25% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(-14px)
+            rotate(-3deg);
+    }
+
+    50% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(-20px)
+            rotate(3deg);
+    }
+
+    75% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(-8px)
+            rotate(-2deg);
+    }
+
+    100% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(0)
+            rotate(0deg);
+    }
+}
+
+
+/* =========================================================
+   GAMBAR KARAKTER
+========================================================= */
+
+.race-character img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+
+    filter:
+        drop-shadow(
+            0 6px 7px rgba(0, 0, 0, 0.20)
+        );
+}
+
+
+/* =========================================================
+   TIM MERAH
+========================================================= */
+
+.race-character-a {
+    left: 0;
+}
+
+
+/* =========================================================
+   TIM BIRU
+========================================================= */
+
+.race-character-b {
+    left: 0;
+}
+
+
+/* =========================================================
+   ANIMASI LOMPAT
+========================================================= */
+
+.race-character.running {
+    animation:
+        sackJump 0.55s
+        cubic-bezier(
+            .22,
+            1,
+            .36,
+            1
+        );
+}
+
+@keyframes sackJump {
+
+    0% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(0)
+            rotate(0deg);
+    }
+
+    25% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(-13px)
+            rotate(-3deg);
+    }
+
+    50% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(-18px)
+            rotate(3deg);
+    }
+
+    75% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(-7px)
+            rotate(-2deg);
+    }
+
+    100% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(0)
+            rotate(0deg);
+    }
+}
+
+
+
+/* =========================================================
+   PROGRESS MARKER
+========================================================= */
+
+.race-progress-marker {
+    position: absolute;
+
+    top: 50%;
+
+    left: 0;
+
+    width: 18px;
+    height: 18px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    z-index: 4;
+
+    pointer-events: none;
+
+    transition:
+        left 0.55s cubic-bezier(
+            .22,
+            1,
+            .36,
+            1
+        );
+}
+
+.race-lane-a .race-progress-marker {
+    background: var(--red);
+
+    box-shadow:
+        0 0 0 5px rgba(
+            239,
+            68,
+            68,
+            0.15
+        );
+}
+
+.race-lane-b .race-progress-marker {
+    background: var(--blue);
+
+    box-shadow:
+        0 0 0 5px rgba(
+            59,
+            130,
+            246,
+            0.15
+        );
+}
+
+
+/* =========================================================
+   FINISH EFFECT
+========================================================= */
+
+.race-character.finished {
+    animation:
+        finishBounce 0.45s
+        cubic-bezier(.22, 1, .36, 1)
+        infinite alternate;
+
+    filter:
+        drop-shadow(
+            0 8px 10px rgba(0, 0, 0, 0.25)
+        );
+}
+
+@keyframes finishBounce {
+
+    0% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(0)
+            rotate(-2deg)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(-18px)
+            rotate(2deg)
+            scale(1.05);
+    }
+
+    100% {
+        transform:
+            translate(-20%, calc(-50% - 15px))
+            translateY(0)
+            rotate(-2deg)
+            scale(1);
+    }
+}
+
+
+
+
+/* =========================================================
+   ACTIVE LANE
+========================================================= */
+
+.race-lane.active {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 0.8)
+        );
+}
+
+.race-lane-a.active {
+    box-shadow:
+        inset 5px 0 0 var(--red);
+}
+
+.race-lane-b.active {
+    box-shadow:
+        inset 5px 0 0 var(--blue);
+}
+
+
+/* =========================================================
+   RESPONSIVE TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .race-lane {
+        grid-template-columns: 110px minmax(0, 1fr);
+
+        min-height: 130px;
+
+        padding-right: 25px;
+    }
+
+    .race-character {
+        width: 90px;
+        height: 90px;
+    }
+
+    .race-start-line {
+        left: 65px;
+    }
+
+    .race-finish-line {
+        right: 65px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .race-track-area {
+        margin-top: 15px;
+
+        padding: 15px 0 20px;
+
+        border-radius: 18px;
+    }
+
+    .race-lane {
+        grid-template-columns: 1fr;
+
+        gap: 5px;
+
+        min-height: 155px;
+
+        padding: 12px 15px 18px;
+    }
+
+    .race-lane-header {
+        justify-content: center;
+
+        font-size: 0.85rem;
+    }
+
+    .race-track {
+        height: 95px;
+
+        margin-top: 5px;
+    }
+
+    .race-character {
+        width: 78px;
+        height: 78px;
+    }
+
+    .race-start-line {
+        left: 15px;
+
+        top: 65px;
+        bottom: 20px;
+    }
+
+    .race-finish-line {
+        right: 15px;
+
+        top: 65px;
+        bottom: 20px;
+    }
+
+    .race-start-line span,
+    .race-finish-line span {
+        display: none;
+    }
+
+    .finish-flag {
+        top: -38px;
+
+        font-size: 1.7rem;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .race-lane {
+        min-height: 140px;
+    }
+
+    .race-track {
+        height: 85px;
+    }
+
+    .race-character {
+        width: 68px;
+        height: 68px;
+    }
+
+    .race-track-line {
+        height: 5px;
+    }
+}
+
+
+/* =========================================================
+   REDUCE MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .race-character {
+        transition: none;
+    }
+
+    .race-character.running,
+    .race-character.finished {
+        animation: none !important;
+    }
+
+}
+
+/* =========================================================
+   INFO
+========================================================= */
+.race-goal-info {
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+  margin: 4px 0 12px;
+}
+
+.race-goal-info strong {
+  color: #22c55e;
+}
