@@ -1589,6 +1589,8 @@ function answerQuestion(team, selectedAnswer, clickedButton) {
     isCorrect ? "✅ Benar" : "❌ Salah",
   );
 
+   playAnswerSound(isCorrect);
+   
   /*
    * =====================================================
    * JAWABAN BENAR
@@ -1650,6 +1652,21 @@ function highlightCorrectAnswer(team, correctAnswer) {
   if (button) {
     button.classList.add("correct-answer-reveal");
   }
+}
+
+/* =========================================================
+   SOUND CORRECT / WRONG ANSWER
+   ========================================================= */
+
+function playAnswerSound(isCorrect) {
+  const sound = new Audio(
+    isCorrect ? "../assets/audio/correct.mp3" : "../assets/audio/wrong.mp3",
+  );
+
+  sound.volume = 0.8;
+  sound.play().catch((error) => {
+    console.error("Audio gagal:", error);
+  });
 }
 
 /* =========================================================
