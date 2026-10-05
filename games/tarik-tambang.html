@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Tarik Tambang - EduGame</title>
+
+    <link rel="stylesheet" href="../css/games/tarik-tambang.css" />
+  </head>
+
+  <body>
+    <main class="tug-game">
+      <!-- =====================================================
+             SETUP GAME
+        ====================================================== -->
+
+      <section id="setupSection" class="game-section setup-section">
+        <div class="setup-card">
+          <div class="game-header">
+            <button type="button" class="back-button" onclick="backToHome()">
+              ← Kembali
+            </button>
+
+            <h1>🪢 Tarik Tambang</h1>
+
+            <!-- <p>Kedua tim menjawab soal secara bersamaan.</p> -->
+          </div>
+
+          <h2>⚙️ Persiapan Permainan</h2>
+
+          <div class="form-group">
+            <label for="subjectSelect">Mata Pelajaran</label>
+            <select id="subjectSelect">
+              <option value="">Pilih Mata Pelajaran</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="classSelect">Kelas</label>
+            <select id="classSelect" disabled>
+              <option value="">Pilih Kelas</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="bankSelect">Bank Soal</label>
+            <select id="bankSelect" disabled>
+              <option value="">Pilih Bank Soal</option>
+            </select>
+          </div>
+
+          <div class="team-inputs">
+            <div class="team-input team-a">
+              <label for="teamAInput">🔴 Nama Tim A</label>
+              <input
+                type="text"
+                id="teamAInput"
+                value="Tim Merah"
+                maxlength="40"
+              />
+            </div>
+
+            <div class="team-input team-b">
+              <label for="teamBInput">🔵 Nama Tim B</label>
+              <input
+                type="text"
+                id="teamBInput"
+                value="Tim Biru"
+                maxlength="40"
+              />
+            </div>
+          </div>
+
+          <div id="setupInfo" class="setup-info">
+            Pengaturan permainan akan mengikuti Game Settings.
+          </div>
+
+          <div id="setupError" class="game-message error" hidden></div>
+
+          <button type="button" id="startGameButton" class="primary-button">
+            🚀 Mulai Permainan
+          </button>
+        </div>
+      </section>
+
+      <!-- =====================================================
+             GAME
+        ====================================================== -->
+
+      <section id="gameSection" class="game-section" hidden>
+        <header class="game-topbar">
+          <div class="game-title-wrapper">
+            <button
+              type="button"
+              class="back-button game-back-button"
+              onclick="backToHome()"
+            >
+              ← Kembali
+            </button>
+
+            <div>
+              <span class="game-label"> 🪢 TARIK TAMBANG </span>
+
+              <h1 id="gameTitle">Tarik Tambang</h1>
+            </div>
+          </div>
+
+          <!-- KANAN: MUTE + TIMER -->
+          <div class="game-topbar-right">
+            <!-- Tombol mute hanya ada di game -->
+            <button
+              type="button"
+              id="muteMusicButton"
+              class="mute-music-button"
+              onclick="toggleMusicMute()"
+              aria-label="Mute musik"
+              title="Mute musik"
+            >
+              🔊
+            </button>
+
+            <!-- Timer hanya ditampilkan jika aktif -->
+            <div id="timerContainer" class="timer-container" hidden>
+              <span>⏱️</span>
+
+              <strong id="timerDisplay">15</strong>
+
+              <small>detik</small>
+            </div>
+          </div>
+        </header>
+
+        <!-- =================================================
+           PAPAN SKOR
+      ================================================== -->
+
+        <div class="score-board">
+          <div class="score-team score-team-a">
+            <span id="teamAName">Tim Merah</span>
+
+            <strong id="scoreA">0</strong>
+          </div>
+
+          <div class="score-vs">VS</div>
+
+          <div class="score-team score-team-b">
+            <strong id="scoreB">0</strong>
+
+            <span id="teamBName">Tim Biru</span>
+          </div>
+        </div>
+
+        <!-- KETERANGAN JUMLAH JAWABAN BENAR UNTUK MENANG -->
+        <div class="race-goal-info" id="raceGoalInfo">
+          🎯 Butuh <strong><span id="maxStepsValue">0</span></strong> jawaban
+          benar untuk mencapai FINISH dan menang!
+        </div>
+
+        <!-- =================================================
+           TALI
+      ================================================== -->
+
+        <div class="rope-area">
+          <!-- ANAK TIM MERAH -->
+          <div class="rope-character rope-character-left" id="redCharacter">
+            <img
+              src="../assets/images/red-team-tarik-tambang.png"
+              alt="Tim Merah Tarik Tambang"
+            />
+          </div>
+
+          <!-- TALI -->
+          <div class="rope-track">
+            <div class="rope">
+              <div id="ropePosition" class="rope-position">🚩</div>
+            </div>
+          </div>
+
+          <!-- ANAK TIM BIRU -->
+          <div class="rope-character rope-character-right" id="blueCharacter">
+            <img
+              src="../assets/images/blue-team-tarik-tambang.png"
+              alt="Tim Biru Tarik Tambang"
+            />
+          </div>
+        </div>
+
+        <!-- =================================================
+           DUA SOAL BERSAMAAN
+      ================================================== -->
+
+        <div class="question-arena">
+          <!-- TIM A -->
+          <article id="teamAPanel" class="question-panel team-a-panel">
+            <div class="question-header">
+              <div>
+                <span class="team-badge">🔴 TIM A</span>
+
+                <h2 id="questionATitle">Soal Tim A</h2>
+              </div>
+
+              <span id="statusA" class="answer-status"> Belum menjawab </span>
+            </div>
+
+            <div id="questionAText" class="question-text">Memuat soal...</div>
+
+            <div id="answersA" class="answers"></div>
+          </article>
+
+          <!-- TIM B -->
+          <article id="teamBPanel" class="question-panel team-b-panel">
+            <div class="question-header">
+              <div>
+                <span class="team-badge">🔵 TIM B</span>
+
+                <h2 id="questionBTitle">Soal Tim B</h2>
+              </div>
+
+              <span id="statusB" class="answer-status"> Belum menjawab </span>
+            </div>
+
+            <div id="questionBText" class="question-text">Memuat soal...</div>
+
+            <div id="answersB" class="answers"></div>
+          </article>
+        </div>
+
+        <!-- =================================================
+           PROGRESS
+      ================================================== -->
+
+        <div class="game-progress">
+          <span>
+            Soal
+            <strong id="questionNumber">1</strong>
+          </span>
+
+          <span>
+            dari
+            <strong id="questionTotal">0</strong>
+          </span>
+        </div>
+
+        <div id="roundMessage" class="round-message" hidden></div>
+      </section>
+
+      <!-- =====================================================
+             HASIL
+        ====================================================== -->
+
+      <section id="resultSection" class="game-section result-section" hidden>
+        <div class="result-card">
+          <div class="result-icon">🏆</div>
+
+          <h1>Permainan Selesai!</h1>
+
+          <p id="resultMessage">Permainan telah selesai.</p>
+
+          <div class="final-score">
+            <div class="final-team final-a">
+              <span id="finalTeamA"> Tim Merah </span>
+
+              <strong id="finalScoreA"> 0 </strong>
+            </div>
+
+            <div class="final-divider">:</div>
+
+            <div class="final-team final-b">
+              <strong id="finalScoreB"> 0 </strong>
+
+              <span id="finalTeamB"> Tim Biru </span>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button
+              type="button"
+              class="primary-button"
+              onclick="restartGame()"
+            >
+              🔄 Main Lagi
+            </button>
+
+            <button
+              type="button"
+              class="secondary-button"
+              onclick="backToHome()"
+            >
+              🏠 Kembali ke Beranda
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- DATABASE -->
+    <script src="../js/db.js"></script>
+
+    <!-- GAME SETTINGS -->
+    <script src="../js/game-settings.js"></script>
+
+    <!-- GAME -->
+    <script src="../js/games/tarik-tambang.js"></script>
+    <script>
+      /* =========================================================
+   ANIMASI PEMAIN TARIK TAMBANG
+   ========================================================= */
+
+      function animateRopePlayer(team) {
+        const redCharacter = document.getElementById("redCharacter");
+        const blueCharacter = document.getElementById("blueCharacter");
+
+        if (team === "A") {
+          if (!redCharacter) {
+            return;
+          }
+
+          redCharacter.classList.remove("pulling");
+
+          /* Memaksa browser mengulang animasi */
+          void redCharacter.offsetWidth;
+
+          redCharacter.classList.add("pulling");
+
+          setTimeout(() => {
+            redCharacter.classList.remove("pulling");
+          }, 450);
+        } else {
+          if (!blueCharacter) {
+            return;
+          }
+
+          blueCharacter.classList.remove("pulling");
+
+          /* Memaksa browser mengulang animasi */
+          void blueCharacter.offsetWidth;
+
+          blueCharacter.classList.add("pulling");
+
+          setTimeout(() => {
+            blueCharacter.classList.remove("pulling");
+          }, 450);
+        }
+      }
+
+      /* =========================================================
+   ROPE
+   ========================================================= */
+
+      function moveRope(team) {
+        if (gameFinished) {
+          return;
+        }
+
+        /*
+         * ANIMASI PEMAIN
+         *
+         * A = MERAH
+         * B = BIRU
+         */
+        animateRopePlayer(team);
+
+        /*
+         * MERAH = KIRI
+         *
+         * BIRU = KANAN
+         */
+
+        if (team === "A") {
+          ropeDifference--;
+        } else {
+          ropeDifference++;
+        }
+
+        /*
+         * Batasi posisi.
+         */
+
+        ropeDifference = Math.max(
+          -ropeMaxSteps,
+          Math.min(ropeMaxSteps, ropeDifference),
+        );
+
+        /*
+         * Update posisi bendera.
+         */
+
+        updateRopePosition();
+
+        /*
+         * CEK UJUNG.
+         *
+         * Merah mencapai ujung kiri.
+         *
+         * Biru mencapai ujung kanan.
+         */
+
+        if (ropeDifference <= -ropeMaxSteps) {
+          finishGame("A", "rope");
+
+          return;
+        }
+
+        if (ropeDifference >= ropeMaxSteps) {
+          finishGame("B", "rope");
+
+          return;
+        }
+      }
+    </script>
+  </body>
+</html>
