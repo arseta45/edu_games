@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduGame Platform</title>
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Library untuk membaca Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  </head>
+
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>🎮 EduGame</h1>
+        <p>Platform Game Edukasi</p>
+      </div>
+
+      <div class="status">
+        <span id="dbStatus">● Database lokal</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- DASHBOARD -->
+      <section id="dashboardPage" class="page active">
+        <div class="hero">
+          <h2>Selamat Datang di EduGame</h2>
+          <p>Platform game pembelajaran untuk berbagai mata pelajaran.</p>
+        </div>
+
+        <div class="menu-grid">
+          <button class="menu-card" onclick="showPage('importPage')">
+            <span>📥</span>
+            <strong>Import Soal</strong>
+            <small>Masukkan soal dari Excel</small>
+          </button>
+
+          <button class="menu-card" onclick="showQuestionBanks()">
+            <span>📚</span>
+            <strong>Bank Soal</strong>
+            <small>Lihat soal yang tersimpan</small>
+          </button>
+
+          <button class="menu-card" onclick="showPage('gameSelectPage')">
+            <span>🎮</span>
+            <strong>Mulai Bermain</strong>
+            <small>Pilih permainan edukasi</small>
+          </button>
+
+          <!-- GAME SETTING -->
+          <button class="menu-card" onclick="showPage('gameSettingPage')">
+            <span>⚙️</span>
+            <strong>Game Setting</strong>
+            <small>Atur waktu dan aturan permainan</small>
+          </button>
+        </div>
+
+        <div class="statistics">
+          <div class="stat-card">
+            <span id="totalQuestions">0</span>
+            <small>Total Soal</small>
+          </div>
+
+          <div class="stat-card">
+            <span id="totalSubjects">0</span>
+            <small>Mata Pelajaran</small>
+          </div>
+
+          <div class="stat-card">
+            <span id="totalBanks">0</span>
+            <small>Bank Soal</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- IMPORT EXCEL -->
+      <section id="importPage" class="page">
+        <button class="back-button" onclick="showPage('dashboardPage')">
+          ← Kembali
+        </button>
+
+        <div class="panel">
+          <h2>📥 Import Bank Soal</h2>
+
+          <p>Upload file Excel yang berisi pertanyaan dan pilihan jawaban.</p>
+
+          <div class="excel-format">
+            <h3>Format Excel</h3>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>mapel</th>
+                  <th>kelas</th>
+                  <th>materi</th>
+                  <th>pertanyaan</th>
+                  <th>opsi_a</th>
+                  <th>opsi_b</th>
+                  <th>opsi_c</th>
+                  <th>opsi_d</th>
+                  <th>jawaban</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>Bahasa Indonesia</td>
+                  <td style="text-align: center">4</td>
+                  <td style="text-align: center">Kalimat</td>
+                  <td>Contoh pertanyaan?</td>
+                  <td style="text-align: center">Jawaban A</td>
+                  <td style="text-align: center">Jawaban B</td>
+                  <td style="text-align: center">Jawaban C</td>
+                  <td style="text-align: center">Jawaban D</td>
+                  <td style="text-align: center">B</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="upload-area">
+            <label for="excelFile" class="upload-button">
+              📂 Pilih File Excel
+            </label>
+
+            <input type="file" id="excelFile" accept=".xlsx,.xls" hidden />
+
+            <p id="fileName">Belum ada file dipilih</p>
+          </div>
+
+          <button id="importButton" class="primary-button" disabled>
+            Import Soal
+          </button>
+
+          <div id="importResult"></div>
+        </div>
+      </section>
+
+      <!-- BANK SOAL -->
+      <section id="questionBankPage" class="page">
+        <button class="back-button" onclick="showPage('dashboardPage')">
+          ← Kembali
+        </button>
+
+        <div class="panel">
+          <h2>📚 Bank Soal</h2>
+
+          <div id="bankList"></div>
+        </div>
+      </section>
+
+      <!-- PILIH GAME -->
+      <section id="gameSelectPage" class="page">
+        <button class="back-button" onclick="showPage('dashboardPage')">
+          ← Kembali
+        </button>
+
+        <div class="panel">
+          <h2>🎮 Pilih Permainan</h2>
+
+          <!-- <div class="game-grid">
+            <button class="game-card" onclick="openGame('tarik-tambang')">
+              <span>🪢</span>
+              <strong>Tarik Tambang</strong>
+              <small>Jawab pertanyaan dan tarik tali!</small>
+            </button>
+
+            <button class="game-card disabled" disabled>
+              <span>🚀</span>
+              <strong>Balap Roket</strong>
+              <small>Segera hadir</small>
+            </button>
+
+            <button class="game-card disabled" disabled>
+              <span>🏰</span>
+              <strong>Menara Pengetahuan</strong>
+              <small>Segera hadir</small>
+            </button>
+          </div> -->
+
+          <div class="game-grid">
+            <button class="game-card" onclick="openGame('tarik-tambang')">
+              <span class="game-image">
+                <img
+                  src="assets/images/tarik-tambang.png"
+                  alt="Tarik Tambang"
+                />
+              </span>
+
+              <strong>Tarik Tambang</strong>
+              <small>Jawab pertanyaan dan tarik tali!</small>
+            </button>
+
+            <button class="game-card" onclick="openGame('balap-karung')">
+              <span class="game-image">
+                <img src="assets/images/balap-karung.png" alt="Balap Karung" />
+              </span>
+
+              <strong>Balap Karung</strong>
+              <!-- <small>Segera hadir</small> -->
+              <small>Jawab pertanyaan dan berlomba sampai finis!</small>
+            </button>
+
+            <button
+              class="game-card disabled"
+              onclick="openGame('panjat-pinang')"
+              disabled
+            >
+              <span class="game-image">
+                <img
+                  src="assets/images/panjat-pinang.png"
+                  alt="Panjat Pinang"
+                />
+              </span>
+
+              <strong>Panjat Pinang</strong>
+              <!-- <small>Jawab pertanyaan dan panjat sampai puncak!</small> -->
+              <small>Segera hadir</small>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTING GAME -->
+      <section id="gameSettingPage" class="page">
+        <button class="back-button" onclick="showPage('dashboardPage')">
+          ← Kembali
+        </button>
+
+        <div class="settings-panel">
+          <div class="settings-header">
+            <h1>⚙️ Game Setting</h1>
+            <p>Atur cara permainan sebelum dimainkan</p>
+          </div>
+
+          <!-- WAKTU MENJAWAB -->
+          <div class="setting-card">
+            <div class="setting-card-header">
+              <span class="setting-icon">⏱️</span>
+
+              <div>
+                <h2>Waktu Menjawab</h2>
+                <p>Tentukan apakah setiap soal memiliki batas waktu.</p>
+              </div>
+            </div>
+
+            <div class="setting-options">
+              <label class="setting-radio">
+                <input
+                  type="radio"
+                  name="globalTimerMode"
+                  value="true"
+                  checked
+                />
+
+                <div>
+                  <strong>Gunakan Waktu</strong>
+                  <small> Setiap soal memiliki batas waktu. </small>
+                </div>
+              </label>
+
+              <label class="setting-radio">
+                <input type="radio" name="globalTimerMode" value="false" />
+
+                <div>
+                  <strong>Tanpa Waktu</strong>
+                  <small> Tim dapat menjawab tanpa batas waktu. </small>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- DURASI -->
+          <div class="setting-card" id="globalTimerOptions">
+            <div class="setting-card-header">
+              <span class="setting-icon">⏳</span>
+
+              <div>
+                <h2>Durasi Per Soal</h2>
+                <p>Pilih waktu yang diberikan untuk setiap pertanyaan.</p>
+              </div>
+            </div>
+
+            <div class="duration-grid">
+              <label class="duration-option">
+                <input type="radio" name="globalTimeLimit" value="10" />
+
+                <span class="duration-number">10</span>
+                <span class="duration-label">detik</span>
+              </label>
+
+              <label class="duration-option">
+                <input type="radio" name="globalTimeLimit" value="15" checked />
+
+                <span class="duration-number">15</span>
+                <span class="duration-label">detik</span>
+              </label>
+
+              <label class="duration-option">
+                <input type="radio" name="globalTimeLimit" value="30" />
+
+                <span class="duration-number">30</span>
+                <span class="duration-label">detik</span>
+              </label>
+
+              <label class="duration-option">
+                <input type="radio" name="globalTimeLimit" value="45" />
+
+                <span class="duration-number">45</span>
+                <span class="duration-label">detik</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- COUNTDOWN -->
+          <div class="setting-card">
+            <div class="setting-card-header">
+              <span class="setting-icon">🔔</span>
+
+              <div>
+                <h2>Countdown</h2>
+                <p>Tampilkan hitungan mundur pada layar permainan.</p>
+              </div>
+            </div>
+
+            <label class="setting-switch">
+              <input type="checkbox" id="globalCountdown" checked />
+
+              <span class="switch-slider"></span>
+
+              <span> Tampilkan countdown </span>
+            </label>
+          </div>
+
+          <!-- ACAK JAWABAN -->
+          <div class="setting-card">
+            <div class="setting-card-header">
+              <span class="setting-icon">🔀</span>
+
+              <div>
+                <h2>Acak Jawaban</h2>
+                <p>Acak posisi pilihan jawaban pada setiap soal.</p>
+              </div>
+            </div>
+
+            <label class="setting-switch">
+              <input type="checkbox" id="globalShuffleAnswers" />
+
+              <span class="switch-slider"></span>
+
+              <span> Acak pilihan jawaban </span>
+            </label>
+          </div>
+
+          <!-- BUTTON -->
+          <div class="settings-actions">
+            <button class="btn-secondary" onclick="resetGameSettings()">
+              ↻ Reset
+            </button>
+
+            <button class="btn-primary" onclick="saveGameSettings()">
+              💾 Simpan Pengaturan
+            </button>
+          </div>
+
+          <div id="settingsSavedMessage" class="settings-saved-message"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/db.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/excel.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/game-settings.js"></script>
+  </body>
+</html>
