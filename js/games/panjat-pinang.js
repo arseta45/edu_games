@@ -1094,16 +1094,16 @@ function renderAnswers(team) {
 
     button.type = "button";
 
-    button.className = "pinang-answer-button";
+    button.className = "answer-button";
 
     button.dataset.answer = letter;
 
     button.innerHTML = `
-        <span class="pinang-answer-letter">
+        <span class="answer-letter">
           ${letter}
         </span>
 
-        <span class="pinang-answer-text">
+        <span class="answer-text">
           ${escapeHtml(options[letter])}
         </span>
       `;
