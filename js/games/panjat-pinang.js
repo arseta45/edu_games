@@ -1356,7 +1356,7 @@ function showTeamFinished(team) {
   if (answers) {
     answers.innerHTML = `
       <div class="pinang-team-finished">
-        🏁 Semua soal selesai
+        🏁 Semua soal telah selesai dijawab!
       </div>
     `;
   }
