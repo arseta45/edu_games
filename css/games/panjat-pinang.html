@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Panjat Pinang - EduGame</title>
+
+    <link rel="icon" type="image/png" href="../assets/images/educational.png" />
+
+    <!-- STYLE KHUSUS PANJAT PINANG -->
+    <link rel="stylesheet" href="../css/games/panjat-pinang.css" />
+    <link rel="stylesheet" href="../css/games/tarik-tambang.css" />
+  </head>
+
+  <body>
+    <main class="tug-game">
+      <!-- =====================================================
+           SETUP
+      ====================================================== -->
+      <section id="setupSection" class="game-section setup-section">
+        <div class="setup-card">
+          <div class="game-header">
+            <button type="button" class="back-button" onclick="backToHome()">
+              ← Kembali
+            </button>
+
+            <h1 style="text-align: center">🌴 Panjat Pinang</h1>
+          </div>
+
+          <h2>⚙️ Persiapan Permainan</h2>
+
+          <div class="form-group">
+            <label for="subjectSelect">Mata Pelajaran</label>
+            <select id="subjectSelect">
+              <option value="">Pilih Mata Pelajaran</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="classSelect">Kelas</label>
+            <select id="classSelect" disabled>
+              <option value="">Pilih Kelas</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="bankSelect">Bank Soal</label>
+            <select id="bankSelect" disabled>
+              <option value="">Pilih Bank Soal</option>
+            </select>
+          </div>
+
+          <div class="team-inputs">
+            <div class="team-input team-a">
+              <label for="teamAInput">🔴 Nama Tim A</label>
+              <input
+                type="text"
+                id="teamAInput"
+                value="Tim Merah"
+                maxlength="40"
+              />
+            </div>
+
+            <div class="team-input team-b">
+              <label for="teamBInput">🔵 Nama Tim B</label>
+              <input
+                type="text"
+                id="teamBInput"
+                value="Tim Biru"
+                maxlength="40"
+              />
+            </div>
+          </div>
+
+          <div id="setupInfo" class="setup-info">
+            Pengaturan permainan akan mengikuti Game Settings.
+          </div>
+
+          <div id="setupError" class="game-message error" hidden></div>
+
+          <button type="button" id="startGameButton" class="primary-button">
+            🚀 Mulai Permainan
+          </button>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           GAME
+      ====================================================== -->
+      <section
+        id="gameSection"
+        class="pinang-game-section pinang-play-section"
+        hidden
+      >
+        <!-- ===================================================
+             HEADER
+        ==================================================== -->
+        <header class="pinang-game-topbar">
+          <button
+            type="button"
+            class="pinang-game-back-button"
+            onclick="backToHome()"
+          >
+            ← Kembali
+          </button>
+
+          <div class="pinang-game-title">
+            <span class="pinang-game-label"> 🌴 PANJAT PINANG </span>
+
+            <h1 id="gameTitle">Panjat Pinang</h1>
+          </div>
+
+          <div class="pinang-topbar-actions">
+            <button
+              type="button"
+              id="muteMusicButton"
+              class="pinang-mute-button"
+              onclick="toggleMusicMute()"
+              aria-label="Mute musik"
+              title="Mute musik"
+            >
+              🔊
+            </button>
+          </div>
+        </header>
+
+        <!-- ===================================================
+             SCORE
+        ==================================================== -->
+        <section class="pinang-score-board">
+          <div class="pinang-score-team pinang-score-team-a">
+            <div class="pinang-score-label">
+              🔴
+              <span id="teamAName"> Tim Merah </span>
+            </div>
+
+            <strong id="scoreA"> 0 </strong>
+          </div>
+
+          <div class="pinang-score-vs">VS</div>
+
+          <div class="pinang-score-team pinang-score-team-b">
+            <strong id="scoreB"> 0 </strong>
+
+            <div class="pinang-score-label">
+              <span id="teamBName"> Tim Biru </span>
+              🔵
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================
+             TARGET
+        ==================================================== -->
+        <section id="raceGoalInfo" class="race-goal-info">
+          🎯 Butuh
+          <strong>
+            <span id="maxStepsValue"> 0 </span>
+          </strong>
+          jawaban benar untuk mencapai
+          <strong>🏆 HADIAH</strong>
+          dan menang!
+        </section>
+
+        <!-- ===================================================
+             MAIN GAME BOARD
+        ==================================================== -->
+        <section class="pinang-game-board">
+          <!-- =================================================
+               TEAM A
+          ================================================== -->
+          <article id="teamAPanel" class="pinang-question-panel pinang-panel-a">
+            <div class="pinang-panel-header">
+              <span class="pinang-team-badge pinang-badge-a"> 🔴 TIM A </span>
+
+              <div class="pinang-panel-status">
+                <span id="statusA" class="pinang-answer-status">
+                  Belum menjawab
+                </span>
+
+                <div id="teamATimer" class="pinang-team-timer">
+                  <span>⏱️</span>
+                  <strong id="teamATimerDisplay">15</strong>
+                  <small>detik</small>
+                </div>
+              </div>
+            </div>
+
+            <h2 id="questionATitle">Soal Tim A</h2>
+
+            <div id="questionAText" class="question-text">Memuat soal...</div>
+
+            <div id="answersA" class="pinang-answers"></div>
+          </article>
+
+          <!-- =================================================
+               CENTER ARENA
+          ================================================== -->
+          <section class="pinang-arena" aria-label="Arena Panjat Pinang">
+            <div class="pinang-arena-sky">
+              <!-- Awan -->
+              <span class="pinang-arena-cloud pinang-cloud-1"> ☁️ </span>
+
+              <span class="pinang-arena-cloud pinang-cloud-2"> ☁️ </span>
+
+              <span class="pinang-arena-cloud pinang-cloud-3"> ☁️ </span>
+
+              <!-- Background tanah -->
+              <div class="pinang-ground"></div>
+
+              <!-- Tiang -->
+              <div class="pinang-pole-container">
+                <img
+                  id="pinangImage"
+                  class="pinang-pole-image"
+                  src="../assets/images/pinang_2.png"
+                  alt="Tiang Panjat Pinang"
+                />
+
+                <!-- Finish -->
+                <div class="pinang-finish">🏁 FINISH</div>
+
+                <!-- Karakter Tim A -->
+                <img
+                  id="panjatCharacterA"
+                  class="pinang-character pinang-character-a"
+                  src="../assets/images/red-team-panjat-pinang.png"
+                  alt="Pemanjat Tim Merah"
+                />
+
+                <!-- Karakter Tim B -->
+                <img
+                  id="panjatCharacterB"
+                  class="pinang-character pinang-character-b"
+                  src="../assets/images/blue-team-panjat-pinang.png"
+                  alt="Pemanjat Tim Biru"
+                />
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+               TEAM B
+          ================================================== -->
+          <article id="teamBPanel" class="pinang-question-panel pinang-panel-b">
+            <div class="pinang-panel-header">
+              <span class="pinang-team-badge pinang-badge-b"> 🔵 TIM B </span>
+
+              <div class="pinang-panel-status">
+                <span id="statusB" class="pinang-answer-status">
+                  Belum menjawab
+                </span>
+
+                <div id="teamBTimer" class="pinang-team-timer">
+                  <span>⏱️</span>
+                  <strong id="teamBTimerDisplay">15</strong>
+                  <small>detik</small>
+                </div>
+              </div>
+            </div>
+
+            <h2 id="questionBTitle">Soal Tim B</h2>
+
+            <div id="questionBText" class="question-text">Memuat soal...</div>
+
+            <div id="answersB" class="pinang-answers"></div>
+          </article>
+        </section>
+
+        <!-- ===================================================
+             PROGRESS
+        ==================================================== -->
+        <section class="pinang-progress">
+          <div class="pinang-progress-title">PROGRESS</div>
+
+          <div class="pinang-progress-info">
+            <span>
+              Soal
+              <strong id="questionNumber"> 1 </strong>
+            </span>
+
+            <span>
+              dari
+              <strong id="questionTotal"> 0 </strong>
+            </span>
+          </div>
+        </section>
+
+        <!-- ROUND MESSAGE -->
+        <!-- <div id="roundMessage" class="pinang-round-message" hidden></div> -->
+      </section>
+
+      <!-- =====================================================
+           RESULT
+      ====================================================== -->
+      <section id="resultSection" class="game-section result-section" hidden>
+        <div class="result-card">
+          <div class="result-icon">🏆</div>
+
+          <h1>Permainan Selesai!</h1>
+
+          <p id="resultMessage">Permainan telah selesai.</p>
+
+          <div class="final-score">
+            <div class="final-team final-a">
+              <span id="finalTeamA"> Tim Merah </span>
+
+              <strong id="finalScoreA"> 0 </strong>
+            </div>
+
+            <div class="final-divider">:</div>
+
+            <div class="final-team final-b">
+              <strong id="finalScoreB"> 0 </strong>
+
+              <span id="finalTeamB"> Tim Biru </span>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button
+              type="button"
+              class="primary-button"
+              onclick="restartGame()"
+            >
+              🔄 Main Lagi
+            </button>
+
+            <button
+              type="button"
+              class="secondary-button"
+              onclick="backToHome()"
+            >
+              🏠 Kembali ke Beranda
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- DATABASE -->
+    <script src="../js/db.js"></script>
+
+    <!-- GAME SETTINGS -->
+    <script src="../js/game-settings.js"></script>
+
+    <!-- GAME -->
+    <script src="../js/games/panjat-pinang.js"></script>
+  </body>
+</html>
