@@ -1258,7 +1258,7 @@ function showTeamFinished(team) {
   if (answers) {
     answers.innerHTML = `
             <div class="team-finished-message">
-                🏁 Semua soal telah selesai dijawab!
+                🏁 Semua soal selesai
             </div>
         `;
   }
@@ -1589,8 +1589,8 @@ function answerQuestion(team, selectedAnswer, clickedButton) {
     isCorrect ? "✅ Benar" : "❌ Salah",
   );
 
-   playAnswerSound(isCorrect);
-   
+  playAnswerSound(isCorrect);
+
   /*
    * =====================================================
    * JAWABAN BENAR
@@ -1785,7 +1785,21 @@ function startTeamTimer(team) {
 
     updateTeamTimerDisplay(team, Math.max(0, remaining), false);
 
+   // Mulai countdown saat tersisa 5 detik
+    if (remaining === 4) {
+      state.countdownAudio = new Audio("../assets/audio/countdown.wav");
+
+      state.countdownAudio.play().catch(() => {});
+    }
+
     if (remaining <= 0) {
+      // Langsung hentikan countdown
+      if (state.countdownAudio) {
+        state.countdownAudio.pause();
+        state.countdownAudio.currentTime = 0;
+        state.countdownAudio = null;
+      }
+
       stopTeamTimer(team);
 
       handleTeamTimeUp(team);
@@ -1808,6 +1822,13 @@ function stopTeamTimer(team) {
     clearInterval(state.timer);
 
     state.timer = null;
+  }
+
+  // Hentikan countdown audio
+  if (state.countdownAudio) {
+    state.countdownAudio.pause();
+    state.countdownAudio.currentTime = 0;
+    state.countdownAudio = null;
   }
 
   state.timerToken++;
