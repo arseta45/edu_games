@@ -1142,7 +1142,7 @@ function showTeamFinished(team) {
   if (answers) {
     answers.innerHTML = `
       <div class="team-finished-message">
-        🏁 Semua soal telah selesai dijawab!
+        🏁 Semua soal selesai
       </div>
     `;
   }
@@ -1380,7 +1380,7 @@ function answerQuestion(team, selectedAnswer, clickedButton) {
     isCorrect ? "✅ Benar" : "❌ Salah",
   );
 
-   playAnswerSound(isCorrect);
+  playAnswerSound(isCorrect);
 
   /* =====================================================
      JAWABAN BENAR
@@ -1531,6 +1531,45 @@ function disableAnswers(team) {
    TEAM TIMER
    ========================================================= */
 
+// function startTeamTimer(team) {
+//   stopTeamTimer(team);
+
+//   const state = teamState[team];
+
+//   if (!state) {
+//     return;
+//   }
+
+//   const limit = Math.max(1, Number(currentSettings.timeLimit) || 15);
+
+//   const token = ++state.timerToken;
+
+//   let remaining = limit;
+
+//   updateTeamTimerDisplay(team, remaining, false);
+
+//   state.timer = setInterval(() => {
+//     if (token !== state.timerToken) {
+//       stopTeamTimer(team);
+//       return;
+//     }
+
+//     if (state.answered || state.finished || gameFinished) {
+//       stopTeamTimer(team);
+//       return;
+//     }
+
+//     remaining--;
+
+//     updateTeamTimerDisplay(team, Math.max(0, remaining), false);
+
+//     if (remaining <= 0) {
+//       stopTeamTimer(team);
+
+//       handleTeamTimeUp(team);
+//     }
+//   }, 1000);
+// }
 function startTeamTimer(team) {
   stopTeamTimer(team);
 
@@ -1548,6 +1587,8 @@ function startTeamTimer(team) {
 
   updateTeamTimerDisplay(team, remaining, false);
 
+  state.countdownAudio = null;
+
   state.timer = setInterval(() => {
     if (token !== state.timerToken) {
       stopTeamTimer(team);
@@ -1563,7 +1604,21 @@ function startTeamTimer(team) {
 
     updateTeamTimerDisplay(team, Math.max(0, remaining), false);
 
+    // Mulai countdown saat tersisa 5 detik
+    if (remaining === 4) {
+      state.countdownAudio = new Audio("../assets/audio/countdown.wav");
+
+      state.countdownAudio.play().catch(() => {});
+    }
+
     if (remaining <= 0) {
+      // Langsung hentikan countdown
+      if (state.countdownAudio) {
+        state.countdownAudio.pause();
+        state.countdownAudio.currentTime = 0;
+        state.countdownAudio = null;
+      }
+
       stopTeamTimer(team);
 
       handleTeamTimeUp(team);
@@ -1586,6 +1641,13 @@ function stopTeamTimer(team) {
     clearInterval(state.timer);
 
     state.timer = null;
+  }
+
+  // Hentikan countdown audio
+  if (state.countdownAudio) {
+    state.countdownAudio.pause();
+    state.countdownAudio.currentTime = 0;
+    state.countdownAudio = null;
   }
 
   state.timerToken++;
