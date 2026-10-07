@@ -1947,6 +1947,8 @@ function handleTeamTimeUp(team) {
    */
   completedQuestionIds[team].add(questionId);
 
+  playAnswerSound(false);
+
   setTimeout(() => {
     if (!gameFinished) {
       nextTeamQuestion(team);
