@@ -1356,7 +1356,7 @@ function showTeamFinished(team) {
   if (answers) {
     answers.innerHTML = `
       <div class="pinang-team-finished">
-        🏁 Semua soal telah selesai dijawab!
+        🏁 Semua soal selesai
       </div>
     `;
   }
@@ -1483,7 +1483,21 @@ function startTeamTimer(team) {
     /*
      * Waktu habis.
      */
+    // Mulai countdown saat tersisa 5 detik
+    if (remaining === 4) {
+      state.countdownAudio = new Audio("../assets/audio/countdown.wav");
+
+      state.countdownAudio.play().catch(() => {});
+    }
+
     if (remaining <= 0) {
+      // Langsung hentikan countdown
+      if (state.countdownAudio) {
+        state.countdownAudio.pause();
+        state.countdownAudio.currentTime = 0;
+        state.countdownAudio = null;
+      }
+
       stopTeamTimer(team);
 
       handleTeamTimeUp(team);
@@ -1506,6 +1520,13 @@ function stopTeamTimer(team) {
     clearInterval(state.timer);
 
     state.timer = null;
+  }
+
+  // Hentikan countdown audio
+  if (state.countdownAudio) {
+    state.countdownAudio.pause();
+    state.countdownAudio.currentTime = 0;
+    state.countdownAudio = null;
   }
 
   state.timerToken++;
