@@ -509,6 +509,11 @@ button:disabled {
     border-color: rgba(59, 130, 246, 0.2);
 }
 
+.score-team span {
+  font-size: 1.2rem;
+  font-weight: 850;
+}
+
 .score-team-info {
     display: flex;
 
